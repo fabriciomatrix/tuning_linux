@@ -1,0 +1,87 @@
+# The MariaDB configuration file
+#
+# The MariaDB/MySQL tools read configuration files in the following order:
+# 1. "/etc/mysql/mariadb.cnf" (this file) to set global defaults,
+# 2. "/etc/mysql/conf.d/*.cnf" to set global options.
+# 3. "/etc/mysql/mariadb.conf.d/*.cnf" to set MariaDB-only options.
+# 4. "~/.my.cnf" to set user-specific options.
+#
+# If the same option is defined multiple times, the last one will apply.
+#
+# One can use all long options that the program supports.
+# Run program with --help to get a list of available options and with
+# --print-defaults to see which it would actually understand and use.
+
+#
+# This group is read both both by the client and the server
+# use it for options that affect everything
+#
+[client-server]
+
+# Import all .cnf files from configuration directory
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mariadb.conf.d/
+
+[mysqld]
+# USAR PARA RECUPERAR A SENHA DE ROOT
+# skip-grant-tables
+
+datadir                                                         = /var/lib/mysql
+tmpdir                                                          = /run/mysqld
+socket                                                          = /var/run/mysqld/mysqld.sock
+user                                                            = mysql
+
+# VariÃ¡vel para ser usada quando o banco de dados for em servidor separado do Zabbix Server
+# 
+#bind =
+
+# network
+connect_timeout                                         = 60
+wait_timeout                                            = 28800
+max_connections                                         = 700
+max_allowed_packet                                      = 728M
+max_connect_errors                                      = 1000
+group_concat_max_len					= 1000000
+
+# limits
+tmp_table_size                                          = 512M
+max_heap_table_size                                     = 256M
+table_cache                                             = 512
+
+# logs
+log-error                                               = /var/log/mariadb/mariadb.log
+slow_query_log_file                                     = /var/log/mariadb/mysql-slow.log
+slow_query_log                                          = 1
+long_query_time                                         = 10
+pid-file                                                = /run/mysqld/mysqld.pid
+
+# innodb
+innodb_data_home_dir                 = /var/lib/mysql
+#innodb_data_file_path               = ibdata1:16M;ibdata2:16M:autoextend:max:512M
+#innodb_data_file_path               = ibdata:128M;ibdata2:128M:autoextend
+innodb_data_file_path                = ibdata1:64M:autoextend
+innodb_file_per_table                = 1
+#
+#
+innodb_status_file                    = 1
+#innodb_additional_mem_pool_size      = 256M
+innodb_buffer_pool_size               = XG
+innodb_flush_method                   = O_DIRECT
+#innodb_io_capacity                   = 2000
+innodb_flush_log_at_trx_commit	      = 2
+#innodb_support_xa                    = 0
+innodb_log_file_size                  = 48M
+innodb_log_buffer_size                = 256M
+performance_schema                    =ON
+
+# other stuff
+event_scheduler                                         = 1
+query_cache_type                                        = 1
+query_cache_size                                        = 32M
+query_cache_limit                                       = 8M
+
+#join_buffer_size                                       = 128K
+thread_cache_size                                       = 16K
+
+# skip-name-resolve
+skip-name-resolve
